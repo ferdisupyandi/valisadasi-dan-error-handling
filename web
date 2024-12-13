@@ -1,0 +1,52 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/register', methods=['POST'])
+def register():
+  # Get data from the request body
+  username = request.json.get('username')
+  email = request.json.get('email')
+  password = request.json.get('password')
+  confirm_password = request.json.get('confirm_password')
+
+  # Validation
+  validation_errors = []
+
+  if len(username) < 5 or len(username) > 10:
+    validation_errors.append({"message": "Username"})
+
+  if not email.endswith('ferdisupyandi501@gmail.com'):
+    validation_errors.append({"message": "Ferdisupyandi501@gmail.com'."})
+
+  if not any(char.isupper() for char in password) or len(password) < 5 or len(password) > 10 or not any(char in '()' for char in password):
+    validation_errors.append({"message": "password"})
+
+  if password != confirm_password:
+    validation_errors.append({"message": "Password"})
+
+  if validation_errors:
+    return jsonify({'validationMessages': validation_errors}), 400
+
+  # TODO: Check if username already exists in the database
+
+  # TODO: Store user data in the database
+
+  return jsonify({"message": "Berhasil Regist"}), 200
+
+@app.route('/login', methods=['POST'])
+def login():
+  # Get data from the request body
+  email = request.json.get('email')
+  password = request.json.get('password')
+
+  # Validation
+  validation_errors = []
+
+  if not email.endswith('@gmail.com'):
+    validation_errors.append({"message": "Email must end with '@gmail.com'."})
+
+  if not password:
+    validation_errors.append({"message": "Password is required."})
+
+  if validation_errors
